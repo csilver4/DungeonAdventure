@@ -1,6 +1,6 @@
 package dungeon;
 
-public class CrushingBlow implements SpecialAttack{
+public class CrushingBlow implements Attack{
 	
 	@Override
 	public void attack(DungeonCharacter player, DungeonCharacter opponent) {

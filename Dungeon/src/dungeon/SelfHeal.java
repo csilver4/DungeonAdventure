@@ -1,6 +1,6 @@
 package dungeon;
 
-public class SelfHeal implements SpecialAttack{
+public class SelfHeal implements Attack{
 	
 	@Override
 	public void attack(DungeonCharacter player, DungeonCharacter opponent) {

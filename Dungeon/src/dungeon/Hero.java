@@ -9,7 +9,7 @@ public abstract class Hero extends DungeonCharacter{
 	private SpecialAttack spAttack;
 	
 	public Hero(String name, int hitPoints, int attackSpeed, double chanceToHit,
-			    int damageMin, int damageMax, double chanceToBlock, SpecialAttack spAttack){
+			    int damageMin, int damageMax, double chanceToBlock, Attack spAttack){
 		
 		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax);
 		this.chanceToBlock = chanceToBlock;
@@ -43,7 +43,7 @@ public abstract class Hero extends DungeonCharacter{
 		    choice = kb.nextInt();
 		    kb.nextLine();
 		    switch (choice){
-			    case 1: attack(opponent);
+			    case 1: attack(this, opponent); // this needs to be basic attack
 			        break;
 			    case 2: spAttack.attack(this, opponent);
 			        break;
@@ -64,9 +64,13 @@ public abstract class Hero extends DungeonCharacter{
 	    if(input.equals("1"))
 	        return new KingArthur();
 	    else if(input.equals("2"))
-	         return new BraveSirRobin(); 
+	        return new BraveSirRobin(); 
 	    else if(input.equals("3"))
-	         return new Zoot();
+	        return new Zoot();
+		else if(input.equals("4"))
+			return new SirLancealot();
+		else if(input.equals("5"))
+			return new UnladenSwallow();
 	    return null;
 	}
 
