@@ -56,22 +56,9 @@ public abstract class Hero extends DungeonCharacter{
 		} while(numTurns > 0);
 
 	}
-
-	public static Hero factory(String input) {
-		
-		if(input == null)
-			return null;	
-	    if(input.equals("1"))
-	        return new KingArthur();
-	    else if(input.equals("2"))
-	        return new BraveSirRobin(); 
-	    else if(input.equals("3"))
-	        return new Zoot();
-		else if(input.equals("4"))
-			return new SirLancealot();
-		else if(input.equals("5"))
-			return new UnladenSwallow();
-	    return null;
+	//this is pointless?
+	public static void chooseHero(String input) {
+		Hero hero = HeroFactory.factory(input);
 	}
 
 	public boolean battle(Monster monster) {
