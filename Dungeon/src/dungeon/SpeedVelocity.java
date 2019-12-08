@@ -1,5 +1,5 @@
 package dungeon;
-public class SpeedVelocity implements Attack{
+public class SpeedVelocity implements SpecialAttack{
     @Override
 	public void attack(DungeonCharacter player, DungeonCharacter opponent) {
 		if (player.name.equals("African")){

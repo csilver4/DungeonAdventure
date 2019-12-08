@@ -1,6 +1,6 @@
 package dungeon;
 
-public interface Attack{
+public interface SpecialAttack{
 	
     public void attack(DungeonCharacter player, DungeonCharacter opponent); 
 }

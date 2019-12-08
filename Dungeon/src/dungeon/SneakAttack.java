@@ -1,6 +1,6 @@
 package dungeon;
 
-public class SneakAttack implements Attack{
+public class SneakAttack implements SpecialAttack{
 
 	@Override
 	public void attack(DungeonCharacter player, DungeonCharacter opponent) {

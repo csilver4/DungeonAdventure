@@ -7,7 +7,7 @@ public class Zoot extends Hero{
 
 	public Zoot(){
 		
-		super("Zoot", 75, 5, .7, 25, 50, .3, SpecialAttackFactory.getAttack("Self Heal"));
+		super("Zoot", 75, 5, .7, 25, 50, .3, new SelfHeal());
 	}
 	public void attack(DungeonCharacter opponent){
 		
