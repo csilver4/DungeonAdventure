@@ -4,7 +4,7 @@ public class KingArthur extends Hero{
 	
     public KingArthur(){
 
-		super("King Aurther", 125, 4, .8, 35, 60, .2, new CrushingBlow());
+		super("King Aurther", 125, 4, .8, 35, 60, .2, SpecialAttackFactory.getAttack("Crushing Blow"));
     }
 
 	public void attack(DungeonCharacter opponent){

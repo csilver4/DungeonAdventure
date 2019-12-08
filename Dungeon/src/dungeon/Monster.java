@@ -7,7 +7,7 @@ public class Monster extends DungeonCharacter{
 	protected int minHeal, maxHeal;
 
 	public Monster(String name, int hitPoints, int attackSpeed, double chanceToHit, double chanceToHeal,
-					 int damageMin, int damageMax, int minHeal, int maxHeal){
+					 int damageMin, int damageMax, Attack theAttack, int minHeal, int maxHeal){
 		
 		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax);
 		this.chanceToHeal = chanceToHeal;
@@ -41,22 +41,9 @@ public class Monster extends DungeonCharacter{
 							opponent.getName() + ":");
 		super.attack(opponent);
 	}
-
-	public static Monster monsterFactory() {
-	
-		int res = (int) (Math.random()*5);
-		if(res == 0)
-			return new Monster("The Black Knight", 200, 2, .6, .1, 30, 50, 30, 50);
-		if(res == 1)
-			return new Monster("Tom The Echanter", 70, 5, .8, .4, 15, 30, 20, 40);
-		if(res == 2)
-			return new Monster("The French Taunters", 100, 3, .8, .3, 30, 50, 30, 50);
-		if(res == 3)
-			return new Monster("The French Taunters", 100, 3, .8, .3, 30, 50, 30, 50);
-		if(res == 4)
-			return new Monster("The French Taunters", 100, 3, .8, .3, 30, 50, 30, 50);
-		else
-			return new Monster("The Black Knight", 200, 2, .6, .1, 30, 50, 30, 50);
+	//also probably pointless
+	public void generateMonster(){
+		MonsterFactory.monsterFactory((int)(Math.random()*5));
 	}
 }
 

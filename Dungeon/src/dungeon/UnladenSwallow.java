@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class UnladenSwallow extends Hero {
     
     public UnladenSwallow() {
-        super(choice(), 25, 10, .8, 8, 20, .2, new SpeedVelocity());
+        super(choice(), 25, 10, .8, 8, 20, .2, SpecialAttackFactory.getAttack("Speed Velocity"));
     }
     public String choice(){
         String name;

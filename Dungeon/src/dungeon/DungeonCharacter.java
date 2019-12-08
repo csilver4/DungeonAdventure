@@ -7,9 +7,9 @@ public abstract class DungeonCharacter{
 	protected int attackSpeed;
 	protected double chanceToHit;
 	protected int damageMin, damageMax;
-
+	private Attack theAttack;
 	public DungeonCharacter(String name, int hitPoints, int attackSpeed,
-				     double chanceToHit, int damageMin, int damageMax){
+				     double chanceToHit, int damageMin, int damageMax, Attack theAttack){
 		
 		this.name = name;
 		this.hitPoints = hitPoints;
@@ -17,21 +17,34 @@ public abstract class DungeonCharacter{
 		this.chanceToHit = chanceToHit;
 		this.damageMin = damageMin;
 		this.damageMax = damageMax;
+		this.attack = theAttack;
 
 	}
+	public Attack getAttack(){
+		return theAttack;
+	}
 
+	public int getDamageMax(){
+		return damageMax;
+	}
+
+	public int getDamageMin(){
+		return damageMin;
+	}
+
+	public double getChanceToHit(){
+		return chanceToHit;
+	}
+	
 	public String getName(){
-		
 		return name;
 	}
 
 	public int getHitPoints(){
-		
 		return hitPoints;
 	}
 	
 	public int getAttackSpeed(){
-		
 		return attackSpeed;
 	}
 
@@ -65,19 +78,7 @@ public abstract class DungeonCharacter{
 	}
 
 	public void attack(DungeonCharacter opponent){
-		
-		boolean canAttack;
-		int damage;
-		canAttack = Math.random() <= chanceToHit;
-		if (canAttack){
-			damage = (int)(Math.random() * (damageMax - damageMin + 1))+ damageMin ;
-			opponent.subtractHitPoints(damage);
-			System.out.println();
-		}else{
-			System.out.println(getName() + "'s attack on " + opponent.getName() +" failed!");
-			System.out.println();
-		}
-
+		this.theAttack.attack(this, opponent);
 	}
 }
 

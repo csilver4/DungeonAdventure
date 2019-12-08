@@ -1,6 +1,6 @@
 package dungeon;
 
-public class StormTheCastle implements SpecialAttack{
+public class StormTheCastle implements Attack{
   
 @Override
 	public void attack(DungeonCharacter player, DungeonCharacter opponent) {
