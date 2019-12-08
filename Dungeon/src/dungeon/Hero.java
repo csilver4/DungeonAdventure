@@ -3,6 +3,10 @@ import java.util.Scanner;
 
 public abstract class Hero extends DungeonCharacter{
 	
+	private boolean heroHavePillarE;
+	private boolean heroHavePillarA;
+	private boolean heroHavePillarI;
+	private boolean heroHavePillarP;
 	private Scanner kb = new Scanner(System.in);
 	protected double chanceToBlock;
 	protected int numTurns;
@@ -12,6 +16,10 @@ public abstract class Hero extends DungeonCharacter{
 			    int damageMin, int damageMax, double chanceToBlock, SpecialAttack spAttack){
 		
 		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax);
+		this.heroHavePillarA = false;
+		this.heroHavePillarE = false;
+		this.heroHavePillarI = false;
+		this.heroHavePillarP = false;
 		this.chanceToBlock = chanceToBlock;
 		this.spAttack = spAttack;
 	}
@@ -21,9 +29,9 @@ public abstract class Hero extends DungeonCharacter{
 		return Math.random() <= chanceToBlock;
 	}
 	
-	public void subtractHitPoints(int hitPoints){
+	public void subtractHitPoints(int hitPoints, boolean fall){
 		
-		if (defend())
+		if (defend() || !fall)
 			System.out.println(name + " BLOCKED the attack!");
 		else
 			super.subtractHitPoints(hitPoints);
@@ -93,5 +101,50 @@ public abstract class Hero extends DungeonCharacter{
 			System.out.println("Quitters never win ;-)");
 			return false;
 		}
+	}
+	
+	public void gameOver(String string) {
+		
+		
+	}
+	
+	public boolean doesHeroHavePillarE() {
+		
+		return this.heroHavePillarE;
+	}
+	
+	public boolean doesHeroHavePillarA() {
+		
+		return this.heroHavePillarA;
+	}
+	
+	public boolean doesHeroHavePillarI() {
+		
+		return this.heroHavePillarI;
+	}
+	
+	public boolean doesHeroHavePillarP() {
+		
+		return this.heroHavePillarP;
+	}
+
+	public void setHeroHavePillarE(boolean heroHavePillarE) {
+		
+		this.heroHavePillarE = heroHavePillarE;
+	}
+	
+	public void setHeroHavePillarA(boolean heroHavePillarA) {
+		
+		this.heroHavePillarA = heroHavePillarA;
+	}
+
+	public void setHeroHavePillarI(boolean heroHavePillarI) {
+	
+		this.heroHavePillarI = heroHavePillarI;
+	}	
+
+	public void setHeroHavePillarP(boolean heroHavePillarP) {
+	
+		this.heroHavePillarP = heroHavePillarP;
 	}
 }

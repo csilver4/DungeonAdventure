@@ -1,196 +1,239 @@
 package dungeon;
-import java.util.Random;
+import java.lang.reflect.Method;
 
 public class Room {
 	
-	int xDimension = 5;
-	int yDimension = 5;
-	boolean hPotion;
-	boolean vPotion;
-	boolean pit;
-	boolean m;
-	boolean entrance;
-	boolean exit;
-	boolean pillarE;
-	boolean pillarA;
-	boolean pillarI;
-	boolean pillarP;
-	Tile[][] floorTile = new Tile[5][5];
+	private int roomXLength;
+	private int roomYLength;
+	private boolean roomContainsHPotion;//regularObject
+	private boolean roomContainsVPotion;//regularObject
+	private boolean roomContainsPits;   //regularObject
+	private boolean roomContainsEntrance;//keyObject
+	private boolean roomContainsExit;    //keyObject
+	private boolean roomContainsPillarE; //keyObject
+	private boolean roomContainsPillarA; //keyObject
+	private boolean roomContainsPillarI; //keyObject
+	private boolean roomContainsPillarP; //keyObject
+	private boolean roomContainsMonster;
+	private boolean roomContainsObject;
+	private boolean roomContainsKeyObject;
+	private Tile[][] floorTile;
 	
-	public boolean placeObject(Tile floorTile) {
+	public Room(int roomXLength, int roomYLength) throws Exception {
 		
-			if(!floorTile.contains) {
-				floorTile.pit = true;
-				floorTile.contains = true;
-				return true;
-			}
-			return false;
+		if((roomXLength < 3 && roomYLength < 2) || (roomXLength < 2 && roomYLength < 3))throw new Exception("Ints passed into room constructor would create a room that is too small to hold all possible objects");
+		
+		this.roomXLength = roomXLength;
+		this.roomYLength = roomYLength;
+		this.roomContainsHPotion = false;
+		this.roomContainsVPotion = false;
+		this.roomContainsPits = false;
+		this.roomContainsEntrance = false;
+		this.roomContainsExit = false;
+		this.roomContainsPillarE = false;
+		this.roomContainsPillarA = false;
+		this.roomContainsPillarI = false;
+		this.roomContainsPillarP = false;
+		this.roomContainsMonster = false;
+		this.roomContainsObject = false;
+		this.roomContainsKeyObject = false;
+		this.floorTile = new Tile[this.roomXLength][this.roomYLength];
+		for(int x = 0; x < this.roomXLength; x++) {
+			for(int y = 0; y < this.roomYLength; y++)
+				this.floorTile[x][y] = new Tile();
+		}
 	}
 	
-	public void initializeTiles() {
+	public void configureRoomTiles() throws Exception {
+	
+		randomizeRoomContents();
+		if(this.roomContainsEntrance) 
+			placeDungeonPortal("setEntrance");
+		else if(this.roomContainsExit) 
+			placeDungeonPortal("setExit");
+		else if(this.roomContainsObject) {
+			if(this.roomContainsPits) {
+				for(int x = 0; x < ((Math.random() * 4) + 1); x++) 
+					placeRoomObject("setPit");
+			}
+			if(this.roomContainsHPotion) 
+				placeRoomObject("setHPotion");
+			if(this.roomContainsVPotion) 
+				placeRoomObject("setVPotion");
+			if(this.roomContainsPillarA) 
+				placeRoomObject("setPillarA");
+			if(this.roomContainsPillarE) 
+				placeRoomObject("setPillarE");
+			if(this.roomContainsPillarI) 
+				placeRoomObject("setPillarI");
+			if(this.roomContainsPillarP) 
+				placeRoomObject("setPillarP");
+		}
+	}
+	
+	private void placeDungeonPortal(String setMethod) throws Exception {
 		
-		Random rand = new Random();
-		int xRand = rand.nextInt(xDimension);
-		int yRand = rand.nextInt(yDimension);
-		if(!entrance && !exit) {
-			int randTemp = rand.nextInt(10);
-			if(randTemp == 0)
-				hPotion = true;
-			randTemp = rand.nextInt(20);
-			if(randTemp == 0)
-				vPotion = true;
-			randTemp = rand.nextInt(5);
-			if(randTemp == 0)
-				pit = true;
-			randTemp = rand.nextInt(10);
-			if(randTemp == 0)
-				m = true;
-		}
-		for(int x = 0; x < xDimension; x++) {
-			for(int y = 0; y < yDimension; y++)
-				floorTile[x][y] = new Tile();
-		}
-		if(entrance) {
-			floorTile[xRand][yRand].entrance = true;
-			floorTile[xRand][yRand].contains = true;
-		}else if(exit) {
-			xRand = rand.nextInt(xDimension);
-			yRand = rand.nextInt(yDimension);
-			floorTile[xRand][yRand].exit = true;
-			floorTile[xRand][yRand].contains = true;
-		}else if(hPotion || vPotion || pit || pillarE || pillarA || pillarI || pillarP) {
-			if(pit) {
-				for(int x = 0; x < 3; x++) {
-					do {
-						xRand = rand.nextInt(xDimension);
-						yRand = rand.nextInt(yDimension);
-						if(!floorTile[xRand][yRand].contains) {
-							floorTile[xRand][yRand].pit = true;
-							floorTile[xRand][yRand].contains = true;
-							break;
-						}
-					}while(floorTile[xRand][yRand].contains);
-				}
-			}
-			if(hPotion) {
-				do {
-					xRand = rand.nextInt(xDimension);
-					yRand = rand.nextInt(yDimension);
-					if(!floorTile[xRand][yRand].contains) {
-						floorTile[xRand][yRand].hPotion = true;
-						floorTile[xRand][yRand].contains = true;
-						break;
-					}
-				}while(floorTile[xRand][yRand].contains);
-			}
-			if(vPotion) {
-				do {
-					xRand = rand.nextInt(xDimension);
-					yRand = rand.nextInt(yDimension);
-					if(!floorTile[xRand][yRand].contains) {
-						floorTile[xRand][yRand].vPotion = true;
-						floorTile[xRand][yRand].contains = true;
-						break;
-					}
-				}while(floorTile[xRand][yRand].contains);
-			}
-			if(pillarE) {
-				do {
-					xRand = rand.nextInt(xDimension);
-					yRand = rand.nextInt(yDimension);
-					if(!floorTile[xRand][yRand].contains) {
-						floorTile[xRand][yRand].pillarE = true;
-						floorTile[xRand][yRand].contains = true;
-						break;
-					}
-				}while(floorTile[xRand][yRand].contains);
-			}
-			if(pillarA) {
-				do {
-					xRand = rand.nextInt(xDimension);
-					yRand = rand.nextInt(yDimension);
-					if(!floorTile[xRand][yRand].contains) {
-						floorTile[xRand][yRand].pillarA = true;
-						floorTile[xRand][yRand].contains = true;
-						break;
-					}
-				}while(floorTile[xRand][yRand].contains);
-			}
-			if(pillarI) {
-				do {
-					xRand = rand.nextInt(xDimension);
-					yRand = rand.nextInt(yDimension);
-					if(!floorTile[xRand][yRand].contains) {
-						floorTile[xRand][yRand].pillarI = true;
-						floorTile[xRand][yRand].contains = true;
-						break;
-					}
-				}while(floorTile[xRand][yRand].contains);
-			}
-			if(pillarP) {
-				do {
-					xRand = rand.nextInt(xDimension);
-					yRand = rand.nextInt(yDimension);
-					if(!floorTile[xRand][yRand].contains) {
-						floorTile[xRand][yRand].pillarP = true;
-						floorTile[xRand][yRand].contains = true;
-						break;
-					}
-				}while(floorTile[xRand][yRand].contains);
-			}
-		}
+		if(setMethod == null)throw new Exception("String object passed into placeRoomPortal is null");
+		
+		int xRand = (int)(Math.random() * this.roomXLength);
+		int yRand = (int)(Math.random() * this.roomYLength);
+		Method method = this.floorTile[xRand][yRand].getClass().getMethod(setMethod, boolean.class);
+        method.invoke(this.floorTile[xRand][yRand], true);
+		this.floorTile[xRand][yRand].setTileContainsObject(true);
 	}
 
-	public boolean checkBattle(Hero mainHero) {
+	private void placeRoomObject(String setMethod) throws Exception {
 		
-		if(m == true)
+		if(setMethod == null)throw new Exception("String object passed into placeRoomObject is null");
+		
+		int xRand = (int)(Math.random() * this.roomXLength);
+		int yRand = (int)(Math.random() * this.roomYLength);
+		do {
+			if(!this.floorTile[xRand][yRand].doesTileContainObject()) {
+		        Method method = this.floorTile[xRand][yRand].getClass().getMethod(setMethod, boolean.class);
+		        method.invoke(this.floorTile[xRand][yRand], true);
+				this.floorTile[xRand][yRand].setTileContainsObject(true);
+				break;
+			}
+			xRand = (int)(Math.random() * this.roomXLength);
+			yRand = (int)(Math.random() * this.roomYLength);
+		}while(this.floorTile[xRand][yRand].doesTileContainObject());
+	}
+
+	private void randomizeRoomContents() {
+		
+		if(!this.roomContainsEntrance && !this.roomContainsExit) {
+			int randTemp = (int)(Math.random() * 10);
+			if(randTemp == 0) {
+				this.roomContainsHPotion = true;
+				this.roomContainsObject = true;
+			}
+			randTemp = (int)(Math.random() * 20);
+			if(randTemp == 0) {
+				this.roomContainsVPotion = true;
+				this.roomContainsObject = true;
+			}
+			randTemp = (int)(Math.random() * 10);
+			if(randTemp == 0) {
+				this.roomContainsPits = true;
+				this.roomContainsObject = true;
+			}
+			randTemp = (int)(Math.random() * 10);
+			if(randTemp == 0) {
+				this.roomContainsMonster = true;
+				this.roomContainsObject = true;
+			}
+		}
+	}
+	public boolean checkBattle(Hero mainHero)throws Exception {
+		
+		if(mainHero == null)throw new Exception("Hero object passed into checkBattle is null");
+		
+		if(roomContainsMonster == true)
 		{
 			Monster monster = Monster.monsterFactory();
 			return mainHero.battle(monster);
 		}
 		return true;
 	}
+	
+	public boolean doesRoomContainEntrance() {
+		
+		return this.roomContainsEntrance;
+	}
+	
+	public boolean doesRoomContainExit() {
+		
+		return this.roomContainsExit;
+	}
+	
+	public boolean doesRoomContainPillarA() {
+		
+		return this.roomContainsPillarA;
+	}
+	
+	public boolean doesRoomContainPillarE() {
+		
+		return this.roomContainsPillarE;
+	}
+	public boolean doesRoomContainPillarI() {
+		
+		return this.roomContainsPillarI;
+	}
+	
+	public boolean doesRoomContainPillarP() {
+		
+		return this.roomContainsPillarP;
+	}
+	
+	public boolean doesRoomContainObject() {
+		return this.roomContainsObject;
+	}
+
+	public boolean doesRoomContainsKeyObject() {
+		return this.roomContainsKeyObject;
+	}
+	
+	public int getRoomXLength() {
+		return this.roomXLength;
+	}
+	
+	public int getRoomYLength() {
+		
+		
+		return this.roomYLength;
+	}
+	
+	public Tile[][] getFloorTiles(){
+		
+		return this.floorTile;
+	}
+	
+	public void setRoomXLength(int roomXLength) {
+		
+		this.roomXLength = roomXLength;
+	}
+	
+	public void setRoomYLength(int roomYLength) {
+		
+		this.roomYLength = roomYLength;
+	}
+	
+	public void setRoomContainsEntrance(boolean roomContainsEntrance) {
+		
+		this.roomContainsEntrance = roomContainsEntrance;
+	}
+	
+	public void setRoomContainsExit(boolean roomContainsExit) {
+		
+		this.roomContainsExit = roomContainsExit;
+	}
+	
+	public void setRoomContainsPillarA(boolean roomContainsPillarA) {
+		
+		this.roomContainsPillarA = roomContainsPillarA;
+	}
+	
+	public void setRoomContainsPillarE(boolean roomContainsPillarE) {
+		
+		this.roomContainsPillarE = roomContainsPillarE;
+	}
+	
+	public void setRoomContainsPillarI(boolean roomContainsPillarI) {
+		
+		this.roomContainsPillarI = roomContainsPillarI;
+	}
+	
+	public void setRoomContainsPillarP(boolean roomContainsPillarP) {
+		
+		this.roomContainsPillarP = roomContainsPillarP;
+	}
+
+	public void setRoomContainsObject(boolean roomContainsObject) {
+		this.roomContainsObject = roomContainsObject;
+	}
+
+	public void setRoomContainsKeyObject(boolean roomContainsKeyObject) {
+		this.roomContainsKeyObject = roomContainsKeyObject;
+	}
 }
-/*
- Contains default constructor and all methods you deem necessary -- modular design is CRUCIAL
- Contains the following items/behaviors
- (Possibly a) Healing Potion - heals 5-15 hit points (this amount will be randomly generated -- you can modify the range)
- (Possibly a) Pit - damage a pit can cause is from 1-20 hit points (this amount will be randomly generated - you can modify the range)
- (Possibly an) Entrance - only one room will have an entrance and the room that contains the entrance will contain NOTHING else
- (Possibly an) Exit - only one room will have an exit and the room that contains the exit will contain NOTHING else
- (Possibly a) Pillar of OO - four pieces in game and they will never be in the same room
- (Possibly a) Monster Doors - N, S, E, W
- 10% possibility (this is a constant that you can modify) room will contain ahealing potion, vision potion, and pit (each of these are 
- independent of one another)
- (If working as a team) Vision Potion - can be used to allow user to see eightrooms surrounding current room as well as current room 
- (location in maze may cause less than 8 to be displayed). The Vision Potion allows you to see the rooms that are immediately around you 
- (this is up to eight rooms depending on your location in the dungeon). This potion only lasts for a single turn.
- Example:
- The hero is currently in room 1,1. If the hero drinks the Vision Potion, then the following rooms are visible for a single turn.
- Room 0,0 Room 0,1 Room 0,2
- Room 1,0 Room 1,1 Room 1,2
- Room 2,0 Room 2,1 Room 2,2
- Must contain a toString method that builds a 2D Graphical representation of the room
- (NOTE: you may use any graphical components in Java that you wish). The (command line) representation is as follows:
- * - * will represent a north/south door (the - represents the door). If the room is on a boundary of the maze (upper or lower), then that
- will be represented with ***
- East/west doors will be represented in a similar fashion with the door being the | character as opposed to a -.
- In the center of the room you will display a letter that represents what the room
- contains. Here are the letters to use and what they represent:
-- M - Multiple Items
-- P - Pit
-- I - Entrance (In)
-- O - Exit (Out)
-- V - Vision Potion
-- H - Healing Potion
-- E - Empty Room
-- X - Monster
-Example: Room 1,1 might look like
-* - *
-| P |
-* - *
-Room 0,0 might look like
-* * *
-* E |
-* - *
-*/

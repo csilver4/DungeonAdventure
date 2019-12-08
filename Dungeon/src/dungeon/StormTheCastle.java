@@ -13,4 +13,5 @@ public class StormTheCastle implements SpecialAttack{
 			System.out.println(player.name + " failed to storm the castle...");
 			System.out.println();
 		}
+	}
 }
