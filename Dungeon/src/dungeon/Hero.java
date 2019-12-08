@@ -1,7 +1,8 @@
 package dungeon;
+import java.io.Serializable;
 import java.util.Scanner;
 
-public abstract class Hero extends DungeonCharacter{
+public abstract class Hero extends DungeonCharacter implements Serializable{
 	
 	private Scanner kb = new Scanner(System.in);
 	protected double chanceToBlock;

@@ -1,7 +1,13 @@
 package dungeon;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Dungeon {
+public class Dungeon implements Serializable {
 
 	int xDimension = 5;
 	int yDimension = 5;
@@ -69,6 +75,10 @@ public class Dungeon {
 				dungeonRoom[x][y].initializeTiles();
 		}
 	}
+	
+
+	
+	
 }
 /*
  Creates/contains a 5 X 5 2D Array of Rooms (you can make this larger if you wish)

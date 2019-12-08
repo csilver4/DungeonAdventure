@@ -1,8 +1,22 @@
 package dungeon;
 import java.util.Scanner;
-import java.awt.event.KeyEvent;
 
-public class DungeonAdventure {
+import dungeon.Room.DoorState;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import sun.security.krb5.internal.KDCReqBody;
+
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class DungeonAdventure implements Serializable{
 
 	static boolean pillarE;
 	static boolean pillarA;
@@ -266,6 +280,63 @@ public class DungeonAdventure {
 		
 		
 	}
+	
+	//TODO Chagne Name convension
+	private void howToSaveAndOpen(KeyEvent k) {
+		if(k.isControlDown() ) {
+			switch (k.getKeyCode()){
+			case KeyEvent.VK_S:
+				//dungeon.saveGame(f);
+				break;
+			case KeyEvent.VK_O:
+				//dungeon.openGame(f);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * Saves a game to the given file
+	 * @param f The file to be saved to.
+	 */
+	public void saveGame(File f) {
+		try {
+			FileOutputStream fos = new FileOutputStream(f);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(pillarE);
+			oos.close();
+			fos.close();
+
+		} catch (Exception ex) {
+			
+			System.out.println("Error saving file - " + ex.getMessage());
+		}
+
+	}
+	
+	
+	
+	/**
+	 * Opens and initializes a saved game
+	 * 
+	 * @param f The file that is to be opened.
+	 */
+	public void openGame(File f) {
+		try {
+			FileInputStream fis = new FileInputStream(f);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			//dungeonRoom = (Room[][]) ois.readObject();
+			ois.close();
+			fis.close();
+			
+		}
+		catch (Exception ex) {
+			System.out.println("Error opening file - " + ex.getMessage());
+		}
+	}
+	
 }
 /* 
  Contains the main method

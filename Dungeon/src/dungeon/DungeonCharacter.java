@@ -1,6 +1,8 @@
 package dungeon;
 
-public abstract class DungeonCharacter{
+import java.io.Serializable;
+
+public abstract class DungeonCharacter implements Serializable{
 	
 	protected String name;
 	protected int hitPoints;
