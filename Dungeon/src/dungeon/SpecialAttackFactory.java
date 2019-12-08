@@ -26,6 +26,9 @@ public class SpecialAttackFactory{
             else if(name.equals("Speed Velocity")){
                 attack = specialAttacks.put(name, new SpeedVelocity());
             }
+            else if(name.equals("Basic Attack")){
+                attack = specialAttacks.put(name, new BasicAttack());
+            }
         }
         return attack;
     }

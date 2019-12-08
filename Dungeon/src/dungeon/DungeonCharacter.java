@@ -7,7 +7,7 @@ public abstract class DungeonCharacter{
 	protected int attackSpeed;
 	protected double chanceToHit;
 	protected int damageMin, damageMax;
-	private Attack theAttack = new BasicAttack();
+	private Attack theAttack;
 	public DungeonCharacter(String name, int hitPoints, int attackSpeed,
 				     double chanceToHit, int damageMin, int damageMax, Attack theAttack){
 		

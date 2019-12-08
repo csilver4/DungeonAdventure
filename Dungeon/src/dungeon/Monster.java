@@ -7,7 +7,7 @@ public class Monster extends DungeonCharacter{
 	protected int minHeal, maxHeal;
 
 	public Monster(String name, int hitPoints, int attackSpeed, double chanceToHit, double chanceToHeal,
-					 int damageMin, int damageMax, int minHeal, int maxHeal){
+					 int damageMin, int damageMax, Attack theAttack, int minHeal, int maxHeal){
 		
 		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax);
 		this.chanceToHeal = chanceToHeal;
