@@ -10,12 +10,12 @@ public abstract class Hero extends DungeonCharacter{
 	private Scanner kb = new Scanner(System.in);
 	protected double chanceToBlock;
 	protected int numTurns;
-	private SpecialAttack spAttack;
+	private Attack spAttack;
 	
 	public Hero(String name, int hitPoints, int attackSpeed, double chanceToHit,
-			    int damageMin, int damageMax, double chanceToBlock, SpecialAttack spAttack){
+			    int damageMin, int damageMax, double chanceToBlock, Attack attack, Attack spAttack){
 		
-		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax);
+		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax, attack);
 		this.heroHavePillarA = false;
 		this.heroHavePillarE = false;
 		this.heroHavePillarI = false;
@@ -63,19 +63,6 @@ public abstract class Hero extends DungeonCharacter{
 			    System.out.println("Number of turns remaining is: " + numTurns);
 		} while(numTurns > 0);
 
-	}
-
-	public static Hero factory(String input) {
-		
-		if(input == null)
-			return null;	
-	    if(input.equals("1"))
-	        return new KingArthur();
-	    else if(input.equals("2"))
-	         return new BraveSirRobin(); 
-	    else if(input.equals("3"))
-	         return new Zoot();
-	    return null;
 	}
 
 	public boolean battle(Monster monster) {

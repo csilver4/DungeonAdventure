@@ -7,9 +7,9 @@ public abstract class DungeonCharacter{
 	protected int attackSpeed;
 	protected double chanceToHit;
 	protected int damageMin, damageMax;
-
+	private Attack attack; 
 	public DungeonCharacter(String name, int hitPoints, int attackSpeed,
-				     double chanceToHit, int damageMin, int damageMax){
+				     double chanceToHit, int damageMin, int damageMax, Attack attack){
 		
 		this.name = name;
 		this.hitPoints = hitPoints;
@@ -17,6 +17,7 @@ public abstract class DungeonCharacter{
 		this.chanceToHit = chanceToHit;
 		this.damageMin = damageMin;
 		this.damageMax = damageMax;
+		this.attack = attack; // this is to be the basic attack
 
 	}
 
