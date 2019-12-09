@@ -7,12 +7,8 @@ public abstract class DungeonCharacter{
 	protected int attackSpeed;
 	protected double chanceToHit;
 	protected int damageMin, damageMax;
-<<<<<<< HEAD
-	private Attack attack; 
-=======
 	private Attack attack;
 
->>>>>>> 10af70a99741577e7056207ecabcbb1fa1e4bbc8
 	public DungeonCharacter(String name, int hitPoints, int attackSpeed,
 				     double chanceToHit, int damageMin, int damageMax, Attack attack){
 		

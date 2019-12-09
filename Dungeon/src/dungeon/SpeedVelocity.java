@@ -1,11 +1,7 @@
 package dungeon;
-<<<<<<< HEAD
-public class SpeedVelocity implements Attack{
-=======
 
 public class SpeedVelocity implements Attack{
 	
->>>>>>> 10af70a99741577e7056207ecabcbb1fa1e4bbc8
     @Override
 	public void attack(DungeonCharacter player, DungeonCharacter opponent) {
     	
