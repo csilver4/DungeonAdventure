@@ -3,7 +3,7 @@ package dungeon;
 public class SirLancealot extends Hero{
     public SirLancealot(){
 
-		super("Sir Lancealot", 100, 3, .9, 32, 60, .1, new StormTheCastle());
+    	super("Sir Lancealot", 100, 3, .9, 32, 60, .1, AttackFactory.getAttack("Basic Attack"), AttackFactory.getAttack("Storm the Castle"));
     }
 
 	public void attack(DungeonCharacter opponent){

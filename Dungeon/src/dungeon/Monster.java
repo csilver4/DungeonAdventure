@@ -1,15 +1,14 @@
 package dungeon;
 
-
 public class Monster extends DungeonCharacter{
 	
 	protected double chanceToHeal;
 	protected int minHeal, maxHeal;
 
 	public Monster(String name, int hitPoints, int attackSpeed, double chanceToHit, double chanceToHeal,
-					 int damageMin, int damageMax, int minHeal, int maxHeal){
+					 int damageMin, int damageMax, Attack attack, int minHeal, int maxHeal){
 		
-		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax);
+		super(name, hitPoints, attackSpeed, chanceToHit, damageMin, damageMax, attack);
 		this.chanceToHeal = chanceToHeal;
 		this.maxHeal = maxHeal;
 		this.minHeal = minHeal;

@@ -1,7 +1,10 @@
 package dungeon;
-public class SpeedVelocity implements SpecialAttack{
+
+public class SpeedVelocity implements Attack{
+	
     @Override
 	public void attack(DungeonCharacter player, DungeonCharacter opponent) {
+    	
 		if (player.name.equals("African")){
 			player.damageMax = 11; //meters per second
 			player.attack(opponent);
