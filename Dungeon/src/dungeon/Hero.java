@@ -11,6 +11,10 @@ public abstract class Hero extends DungeonCharacter{
 	protected double chanceToBlock;
 	protected int numTurns;
 	private Attack spAttack;
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 10af70a99741577e7056207ecabcbb1fa1e4bbc8
 	
 	public Hero(String name, int hitPoints, int attackSpeed, double chanceToHit,
 			    int damageMin, int damageMax, double chanceToBlock, Attack attack, Attack spAttack){

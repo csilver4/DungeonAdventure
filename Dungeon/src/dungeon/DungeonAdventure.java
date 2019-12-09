@@ -1,10 +1,16 @@
 package dungeon;
-import java.util.Scanner;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Scanner;
 
 public class DungeonAdventure {
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception{
 		
 		System.out.println("Dungeon Adventure!");
 		System.out.println("Explore the dungeon, find the pillars of OO, and fight off monsters");
@@ -13,27 +19,35 @@ public class DungeonAdventure {
 		Dungeon dungeon = null;
 		Scanner kb = new Scanner(System.in);
 		if(kb.nextLine().equalsIgnoreCase("l")) {
-			loadGame(mainHero, dungeon);
+			try {
+				loadGame(new File("save.ser"), dungeon, mainHero);
+			}catch (Exception ex) {
+				System.out.println("Error opening file - " + ex.getMessage()); 
+				mainHero = Hero.factory(gameIntroduction());
+				dungeon = new Dungeon(5,5);
+			}
 		}else{
 			mainHero = Hero.factory(gameIntroduction());
 			dungeon = new Dungeon(5,5);
 		}
 		kb.close();
-		dungeon.displayRoom("current");
-		runGame(mainHero, dungeon);
-		System.out.println("do you want to play again?\n Y for yes\n anything else for no");
-		if(kb.nextLine().equalsIgnoreCase("y")) {
-			//play again
-		}
-		
-		
+		String res;
+		do {
+			dungeon.displayRoom("current");
+			runGame(mainHero, dungeon);
+			System.out.println("do you want to play again?\n Y for yes\n anything else for no");
+			res = kb.nextLine();
+			if(res.equalsIgnoreCase("y")) {
+				mainHero = Hero.factory(gameIntroduction());
+				dungeon = new Dungeon(5,5);
+			}
+		}while(res.equalsIgnoreCase("y"));
 	}
 
 	private static void runGame(Hero mainHero, Dungeon dungeon) throws Exception {
 		
 		do {
-			//check for button input
-			
+			keyPressed(new KeyEvent(null, 0, 0, 0, 0), dungeon, mainHero);
 		}while(mainHero.isAlive());
 	}
 
@@ -65,82 +79,115 @@ public class DungeonAdventure {
 		kb.close();
 		return input;
 	}
-
-	private static void loadGame(Hero mainHero, Dungeon dungeon) {
-		// TODO Auto-generated method stub
-		do
+	
+	public static void keyPressed(KeyEvent e, Dungeon dungeon, Hero mainHero) throws Exception {
+        Integer key = e.getKeyCode();
+        if(key == KeyEvent.VK_LEFT) 
+            moveLeft(dungeon, mainHero);
+        if(key == KeyEvent.VK_RIGHT) 
+        	moveRight(dungeon, mainHero);
+        if(key == KeyEvent.VK_UP) 
+        	moveUp(dungeon, mainHero);
+        if(key == KeyEvent.VK_DOWN) 
+        	moveDown(dungeon, mainHero);
+        if(key == KeyEvent.VK_S) 
+        	saveGame(new File("save.ser"), dungeon, mainHero);
+    }
+	
+	private static void saveGame(File f, Dungeon dungeon, Hero mainHero) {
+		try {
+			FileOutputStream fos = new FileOutputStream(f);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(dungeon);
+			oos.writeObject(mainHero);
+			oos.close();
+			fos.close();
+		} catch (Exception ex) {
+			System.out.println("Error saving file - " + ex.getMessage());
+		}
+	}
+	
+	private static void loadGame(File f, Dungeon dungeon, Hero mainHero) throws Exception {
+		
+		FileInputStream fis = new FileInputStream(f);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		dungeon = (Dungeon) ois.readObject();
+		mainHero = (Hero) ois.readObject();
+		ois.close();
+		fis.close();
+	}
+	
+	private static void moveLeft(Dungeon dungeon, Hero mainHero) throws Exception {
+		
+		if(dungeon.getHeroRoomXLoc() == 0 && dungeon.getHeroRoomYLoc() == 2 && dungeon.getHeroDungeonXLoc() > 0) {
+        	dungeon.setHeroRoomXLoc(4);
+        	dungeon.setHeroDungeonXLoc(dungeon.getHeroDungeonXLoc()-1);
+        	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
+        	if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
+        		//gameOver("Loss");
+        	}
+        	dungeon.displayRoom("current");
+        }
+    	if(dungeon.getHeroRoomXLoc() > 0) {
+        	dungeon.setHeroRoomXLoc(dungeon.getHeroRoomXLoc()-1);
+        	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroRoomYLoc()].checkContains(mainHero, dungeon);
+        	dungeon.displayRoom("current");
+        }
 	}
 
-	public void keyPressed(KeyEvent e, Dungeon dungeon, Hero mainHero) throws Exception {
-        Integer key = e.getKeyCode();
-        if (key == KeyEvent.VK_LEFT) {
-            if(dungeon.getHeroRoomXLoc() == 0 && dungeon.getHeroRoomYLoc() == 2 && dungeon.getHeroDungeonXLoc() > 0) {
-            	dungeon.setHeroRoomXLoc(4);
-            	dungeon.setHeroDungeonXLoc(dungeon.getHeroDungeonXLoc()-1);
-            	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
-            	if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
-            		//gameOver("Loss");
-            	}
-            	dungeon.displayRoom("current");
-            }
-        	if(dungeon.getHeroRoomXLoc() > 0) {
-            	dungeon.setHeroRoomXLoc(dungeon.getHeroRoomXLoc()-1);
-            	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroRoomYLoc()].checkContains(mainHero, dungeon);
-            	dungeon.displayRoom("current");
-            }
-        }
-        if (key == KeyEvent.VK_RIGHT) {
-        	if(dungeon.getHeroRoomXLoc() == 4 && dungeon.getHeroRoomYLoc() == 2 && dungeon.getHeroDungeonXLoc() < 4) {
-        		dungeon.setHeroRoomXLoc(0);
-        		dungeon.setHeroDungeonXLoc(dungeon.getHeroDungeonXLoc()+1);
-        		dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroRoomYLoc()].checkContains(mainHero, dungeon);
-        		if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
-            		//gameOver("Loss");
-            	}
-        		dungeon.displayRoom("current");
+	private static void moveRight(Dungeon dungeon, Hero mainHero) throws Exception {
+		
+		if(dungeon.getHeroRoomXLoc() == 4 && dungeon.getHeroRoomYLoc() == 2 && dungeon.getHeroDungeonXLoc() < 4) {
+    		dungeon.setHeroRoomXLoc(0);
+    		dungeon.setHeroDungeonXLoc(dungeon.getHeroDungeonXLoc()+1);
+    		dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroRoomYLoc()].checkContains(mainHero, dungeon);
+    		if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
+        		//gameOver("Loss");
         	}
-        	if(dungeon.getHeroRoomXLoc() < 4) {
-            	dungeon.setHeroRoomXLoc(dungeon.getHeroRoomXLoc()+1);
-            	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
-            	dungeon.displayRoom("current");
+    		dungeon.displayRoom("current");
+    	}
+    	if(dungeon.getHeroRoomXLoc() < 4) {
+        	dungeon.setHeroRoomXLoc(dungeon.getHeroRoomXLoc()+1);
+        	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
+        	dungeon.displayRoom("current");
+    	}
+	}
+
+	private static void moveUp(Dungeon dungeon, Hero mainHero) throws Exception {
+		
+		if(dungeon.getHeroRoomXLoc() == 2 && dungeon.getHeroRoomYLoc() == 4 && dungeon.getHeroDungeonYLoc() < 4) {
+    		dungeon.setHeroRoomYLoc(0);
+    		dungeon.setHeroDungeonYLoc(dungeon.getHeroDungeonYLoc()+1);
+    		dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
+    		if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
+        		//gameOver("Loss");
         	}
-        }
-        if (key == KeyEvent.VK_UP) {
-        	if(dungeon.getHeroRoomXLoc() == 2 && dungeon.getHeroRoomYLoc() == 4 && dungeon.getHeroDungeonYLoc() < 4) {
-        		dungeon.setHeroRoomYLoc(0);
-        		dungeon.setHeroDungeonYLoc(dungeon.getHeroDungeonYLoc()+1);
-        		dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
-        		if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
-            		//gameOver("Loss");
-            	}
-        		dungeon.displayRoom("current");
+    		dungeon.displayRoom("current");
+    	}
+    	if(dungeon.getHeroRoomYLoc() < 4) {
+        	dungeon.setHeroRoomYLoc(dungeon.getHeroRoomYLoc());
+        	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
+        	dungeon.displayRoom("current");
+    	}
+	}
+
+	private static void moveDown(Dungeon dungeon, Hero mainHero) throws Exception {
+		
+		if(dungeon.getHeroRoomXLoc() == 2 && dungeon.getHeroRoomYLoc() == 0 && dungeon.getHeroDungeonYLoc() > 0) {
+    		dungeon.setHeroRoomYLoc(4);
+    		dungeon.setHeroDungeonYLoc(dungeon.getDungeonYLength()-1);
+    		dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
+    		if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
+        		//gameOver("Loss");
         	}
-        	if(dungeon.getHeroRoomYLoc() < 4) {
-            	dungeon.setHeroRoomYLoc(dungeon.getHeroRoomYLoc());
-            	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
-            	dungeon.displayRoom("current");
-        	}
-        }
-        if (key == KeyEvent.VK_DOWN) {
-        	if(dungeon.getHeroRoomXLoc() == 2 && dungeon.getHeroRoomYLoc() == 0 && dungeon.getHeroDungeonYLoc() > 0) {
-        		dungeon.setHeroRoomYLoc(4);
-        		dungeon.setHeroDungeonYLoc(dungeon.getDungeonYLength()-1);
-        		dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
-        		if(!dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).checkBattle(mainHero)) {
-            		//gameOver("Loss");
-            	}
-        		dungeon.displayRoom("current");
-        	}
-        	if(dungeon.getHeroRoomYLoc() > 0) {
-            	dungeon.setHeroRoomYLoc(dungeon.getHeroRoomYLoc()-1);
-            	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
-            	dungeon.displayRoom("current");
-        	}
-        }
-        if(key == KeyEvent.VK_S) {
-        	//save game
-        }
-    }
+    		dungeon.displayRoom("current");
+    	}
+    	if(dungeon.getHeroRoomYLoc() > 0) {
+        	dungeon.setHeroRoomYLoc(dungeon.getHeroRoomYLoc()-1);
+        	dungeon.getDungeonRoom(dungeon.getHeroDungeonXLoc(), dungeon.getHeroDungeonYLoc()).getFloorTiles()[dungeon.getHeroRoomXLoc()][dungeon.getHeroDungeonYLoc()].checkContains(mainHero, dungeon);
+        	dungeon.displayRoom("current");
+    	}
+	}
 }
 /* 
  NOTE: Include a hidden menu option for testing that prints out the entire Dungeon

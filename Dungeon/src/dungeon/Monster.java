@@ -1,6 +1,5 @@
 package dungeon;
 
-
 public class Monster extends DungeonCharacter{
 	
 	protected double chanceToHeal;
