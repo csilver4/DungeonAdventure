@@ -67,17 +67,7 @@ public abstract class DungeonCharacter{
 
 	public void attack(DungeonCharacter opponent){
 		
-		boolean canAttack;
-		int damage;
-		canAttack = Math.random() <= chanceToHit;
-		if (canAttack){
-			damage = (int)(Math.random() * (damageMax - damageMin + 1))+ damageMin ;
-			opponent.subtractHitPoints(damage);
-			System.out.println();
-		}else{
-			System.out.println(getName() + "'s attack on " + opponent.getName() +" failed!");
-			System.out.println();
-		}
+		this.attack.attack(this, opponent);
 
 	}
 }

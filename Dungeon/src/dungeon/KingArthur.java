@@ -10,6 +10,6 @@ public class KingArthur extends Hero{
 	public void attack(DungeonCharacter opponent){
 		
 		System.out.println(name + " swings a mighty sword at " + opponent.getName() + ":");
-		super.attack(opponent);
+		this.attack.attack(this, opponent);//this wont be super.attack
 	}
 }
