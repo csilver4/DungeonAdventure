@@ -74,7 +74,7 @@ public class DungeonAdventure {
 		System.out.println(" 2) Brave Sir Robin");
 		System.out.println(" 3) Zoot");
 		System.out.println(" 4) Sir Lancelot");
-		System.out.println(" 5) a Swollow");
+		System.out.println(" 5) Unladen Swallow");
 		String input = kb.nextLine();
 		kb.close();
 		return input;
