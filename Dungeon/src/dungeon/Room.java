@@ -129,9 +129,10 @@ public class Room {
 		
 		if(mainHero == null)throw new Exception("Hero object passed into checkBattle is null");
 		
-		if(roomContainsMonster == true)
+		if(this.roomContainsMonster == true)
 		{
-			Monster monster = Monster.monsterFactory();
+			int res = (int) (Math.random()*5);
+			Monster monster = MonsterFactory.monsterFactory(res);
 			return mainHero.battle(monster);
 		}
 		return true;

@@ -38,7 +38,9 @@ public abstract class Hero extends DungeonCharacter{
 			super.subtractHitPoints(hitPoints);
 	}
 
-	public void battleChoices(DungeonCharacter opponent){
+	public void battleChoices(DungeonCharacter opponent) throws Exception{
+		
+		if(opponent == null)throw new Exception("DungeonCharacter object passed into battleChoices is null");
 		
 	    numTurns = attackSpeed/opponent.getAttackSpeed();
 		if (numTurns == 0)
@@ -66,20 +68,9 @@ public abstract class Hero extends DungeonCharacter{
 
 	}
 
-	public static Hero factory(String input) {
+	public boolean battle(Monster monster) throws Exception {
 		
-		if(input == null)
-			return null;	
-	    if(input.equals("1"))
-	        return new KingArthur();
-	    else if(input.equals("2"))
-	         return new BraveSirRobin(); 
-	    else if(input.equals("3"))
-	         return new Zoot();
-	    return null;
-	}
-
-	public boolean battle(Monster monster) {
+		if(monster == null)throw new Exception("Monster object passed into bettle is null");
 		
 		char pause = 'p';
 		System.out.println(this.getName() + " battles " +monster.getName());
@@ -102,11 +93,6 @@ public abstract class Hero extends DungeonCharacter{
 			System.out.println("Quitters never win ;-)");
 			return false;
 		}
-	}
-	
-	public void gameOver(String string) {
-		
-		
 	}
 	
 	public boolean doesHeroHavePillarE() {

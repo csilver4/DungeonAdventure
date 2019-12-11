@@ -62,10 +62,12 @@ public abstract class DungeonCharacter{
 	
 	public boolean isAlive(){
 		
-	  return (hitPoints > 0);
+	  return (this.hitPoints > 0);
 	}
 
-	public void attack(DungeonCharacter opponent){
+	public void attack(DungeonCharacter opponent) throws Exception{
+		
+		if(opponent == null)throw new Exception("DungeonCharacter oject passed into attack is null");
 		
 		boolean canAttack;
 		int damage;

@@ -1,12 +1,14 @@
 package dungeon;
 import java.util.HashMap;
-import java.util.Map;
 public class AttackFactory{
     
     private static Attack attack;
     private static HashMap<String, Attack> attacks = new HashMap<String, Attack>();
     
-    public static Attack getAttack(String name){
+    public static Attack getAttack(String name) throws Exception{
+    	
+    	if(name == null || name.contentEquals(""))throw new Exception("String object passed into getAttack is null");
+    	
         if(attacks.containsKey(name)){
             attack = attacks.get(name);
         }
@@ -32,7 +34,9 @@ public class AttackFactory{
         }
         return attack;
     }
+    
     public int getTotalAttacks(){
+    	
         return attacks.size();
     }
 }

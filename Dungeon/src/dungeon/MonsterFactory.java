@@ -2,7 +2,7 @@ package dungeon;
 
 public class MonsterFactory{
 	
-    public static Monster monsterFactory(int res) {
+    public static Monster monsterFactory(int res) throws Exception {
     	
 		if(res == 0)
 			return new Monster("The Black Knight", 200, 2, .6, .1, 30, 50, AttackFactory.getAttack("Basic Attack"), 30, 50);

@@ -1,5 +1,4 @@
 package dungeon;
-import java.util.Scanner;
 
 public class Tile {
 
@@ -58,40 +57,40 @@ public class Tile {
 		if(mainHero == null)throw new Exception("Hero object passed into checkContains is null");
 		if(dungeon == null)throw new Exception("Dungeon object passed into checkContains is null");
 		
-		if(tileContainsObject) {
-			if(tileContainsHPotion) {
+		if(this.tileContainsObject) {
+			if(this.tileContainsHPotion) {
 				pickUpHPotion(mainHero);
 				return;
 			}
-			if(tileContainsPit) {
+			if(this.tileContainsPit) {
 				fellIntoPit(mainHero);
 				return;
 			}
-			if(tileContainsVPotion) {
+			if(this.tileContainsVPotion) {
 				dungeon.displayRoom("vision");
 				return;
 			}
-			if(tileContainsEntrance) {
+			if(this.tileContainsEntrance) {
 				System.out.println("you cannot exit you must finish your quest");
 				return;
 			}
-			if(tileContainsExit) {
+			if(this.tileContainsExit) {
 				useExit(mainHero);
 				return;
 			}
-			if(tileContainsPillarA) {
+			if(this.tileContainsPillarA) {
 				pickUpPillar(mainHero, " picked up the pillar of Abstraction");
 				return;
 			}
-			if(tileContainsPillarE) {
+			if(this.tileContainsPillarE) {
 				pickUpPillar(mainHero, " picked up the pillar of Encapsulation");
 				return;
 			}
-			if(tileContainsPillarI) {
+			if(this.tileContainsPillarI) {
 				pickUpPillar(mainHero, " picked up the pillar of Inheritance");
 				return;
 			}
-			if(tileContainsPillarP) {
+			if(this.tileContainsPillarP) {
 				pickUpPillar(mainHero, " picked up the pillar of Polymorphism");
 				return;
 			}
@@ -102,19 +101,10 @@ public class Tile {
 	
 		if(mainHero == null)throw new Exception("Hero object passed into pickUpHPotion is null");
 		
-		Scanner kb = new Scanner(System.in);
-		System.out.println("do you want to pick up the health potion? \n y for yes \n anything else for no\n");
-		String input = kb.nextLine();
-		if(input.equalsIgnoreCase("y")) {
-			int healAmount = (int) (Math.random()*((15-5)+1))+5;
-			mainHero.hitPoints = mainHero.hitPoints + healAmount;
-			System.out.println(mainHero.name + " was healed " + healAmount + " health point");
-			setHPotion(false);
-			
-			kb.close();
-			return;
-		}
-		kb.close();
+		int healAmount = (int) (Math.random()*((15-5)+1))+5;
+		mainHero.addHitPoints(healAmount);
+		System.out.println(mainHero.name + " was healed " + healAmount + " health point");
+		setHPotion(false);
 		return;
 	}
 
@@ -122,21 +112,13 @@ public class Tile {
 	
 		if(mainHero == null)throw new Exception("Hero object passed into fellIntoPit is null");
 		
-		Scanner kb = new Scanner(System.in);
 		System.out.println(mainHero.name + " fell down a pit and hurt themself!");
 		int fallDamage = (int) (Math.random()*((15-5)+1))+5;
 		mainHero.subtractHitPoints(fallDamage, true);
 		if(!mainHero.isAlive()) {
-			System.out.println(mainHero.name + " died from the fall!");
-			System.out.println("Press enter to continue...");
-			kb.nextLine();
-			kb.close();
-			mainHero.gameOver("loss");
+			System.out.println(mainHero.name + " died from the fall! Game Over");
 			return;
 		}
-		System.out.println("Press enter to continue...");
-		kb.nextLine();
-		kb.close();
 	}
 
 	private void useExit(Hero mainHero)throws Exception {
@@ -144,15 +126,7 @@ public class Tile {
 		if(mainHero == null)throw new Exception("Hero object passed into useExit is null");
 		
 		if(mainHero.doesHeroHavePillarE() || mainHero.doesHeroHavePillarA() || mainHero.doesHeroHavePillarI() || mainHero.doesHeroHavePillarP()) {
-			Scanner kb = new Scanner(System.in);
-			System.out.println("do you want to leave the dungeon? \n y for yes \n anything else for no\n");
-			String input = kb.nextLine();
-			if(input.equalsIgnoreCase("y")) {
-				kb.close();
-				mainHero.gameOver("win");
-				return;
-			}
-			kb.close();
+			System.out.println(mainHero.getName()+" found all the pillars of OO and made it to the exit! Victory!");
 			return;
 		}
 		System.out.println("you are missing a pillar of OO! \nyou must find them all before you leave the dungeon");

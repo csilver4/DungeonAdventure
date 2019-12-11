@@ -3,7 +3,11 @@ package dungeon;
 public class StormTheCastle implements Attack{
   
 @Override
-	public void attack(DungeonCharacter player, DungeonCharacter opponent) {
+	public void attack(DungeonCharacter player, DungeonCharacter opponent) throws Exception {
+	
+		if(player == null)throw new Exception("DungoneCharacter player object passed into attack is null");
+		if(opponent == null)throw new Exception("DungeonCharacter opponent object passed into attack is null");
+	
 		double arrow = Math.random();
 		if (arrow <= .60){
 			int blowPoints = (int)(Math.random() * 50) + 15;

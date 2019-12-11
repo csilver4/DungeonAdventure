@@ -2,11 +2,11 @@ package dungeon;
 
 public class HeroFactory{
 	
-   public static Hero factory(String input) {
+   public static Hero factory(String input) throws Exception {
 	   
-		Hero hero = null;
-		if(input == null || input.equals(""))
-			return null;	
+	   if(input == null || input.equals(""))throw new Exception("String object passed into factory is null or empty");
+	   
+		Hero hero = null;	
 	    if(input.equals("1"))
 	        hero = new KingArthur();
 	    else if(input.equals("2"))

@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class UnladenSwallow extends Hero {
     
-    public UnladenSwallow() {
+    public UnladenSwallow() throws Exception {
         super(choice(), 25, 10, .8, 8, 20, .2, AttackFactory.getAttack("Basic Attack"), AttackFactory.getAttack("Speed Velocity"));
     }
     public static String choice(){
@@ -21,7 +21,9 @@ public class UnladenSwallow extends Hero {
         }
     }
     
-    public void attack(DungeonCharacter opponent){
+    public void attack(DungeonCharacter opponent) throws Exception{
+    	
+		if(opponent == null)throw new Exception("DungeonCharacter opponent object passed into attack is null");
 		
 		System.out.println(name + " runs at and stabs " + opponent.getName() + ":");
 		super.attack(opponent);
