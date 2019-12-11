@@ -127,6 +127,7 @@ public class Tile {
 		
 		if(mainHero.doesHeroHavePillarE() || mainHero.doesHeroHavePillarA() || mainHero.doesHeroHavePillarI() || mainHero.doesHeroHavePillarP()) {
 			System.out.println(mainHero.getName()+" found all the pillars of OO and made it to the exit! Victory!");
+			mainHero.subtractHitPoints(mainHero.getHitPoints());
 			return;
 		}
 		System.out.println("you are missing a pillar of OO! \nyou must find them all before you leave the dungeon");
